@@ -18,7 +18,7 @@ fi
 TAG_NAME="$1"
 REPO_DIR="$HOME/code/NextChat"
 DOCKERFILE="$CURRENT_DIR/Dockerfile"
-ORIGIN_URL="git@github.com:yeying-community/NextChat.git"
+ORIGIN_URL="https://github.com/yeying-community/NextChat.git"
 BUILDER_NAME="multi-builder"
 DOCKERHUB_USER="yeying2025"
 
