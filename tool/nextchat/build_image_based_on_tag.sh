@@ -33,6 +33,7 @@ else
     echo " $REPO_DIR 已存在，正在拉取最新信息..."
     cd "$REPO_DIR"
     git fetch origin
+    git fetch --tags
 fi
 
 
