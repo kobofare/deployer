@@ -6,3 +6,6 @@ openapitools.json
 script/typescript/apidocs.openapi.json
 *.tar.gz
 apidocs.openapi.json
+nohup.out
+*.log
+*.bak

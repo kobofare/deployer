@@ -1,7 +1,7 @@
 services:
   chatgpt-next-web:
     container_name: chatgpt-next-web
-    image: yeying2025/nextchat:2.16.1
+    image: yeying2025/nextchat:3.0.0
     env_file:
      - .env
     ports:
