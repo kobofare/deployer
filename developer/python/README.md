@@ -36,10 +36,37 @@ pyenv install -l
 
 ## 使用 pyenv 管理
 
-### 安装指定 Python 版本 
+### 查看已安装的 Python 版本
 
 ```bash
-pyenv install 3.12.6
+pyenv versions
+```
+
+### 安装指定 Python 版本 
+
+装齐编译 Python 需要的依赖
+```bash
+apt update
+
+apt install -y \
+  build-essential \
+  libssl-dev \
+  zlib1g-dev \
+  libbz2-dev \
+  libreadline-dev \
+  libsqlite3-dev \
+  libffi-dev \
+  libncursesw5-dev \
+  libncurses-dev \
+  xz-utils \
+  tk-dev \
+  libxml2-dev \
+  libxmlsec1-dev \
+  liblzma-dev
+```
+
+```bash
+pyenv install 3.12.12
 ```
 
 ### 设置全局默认版本
