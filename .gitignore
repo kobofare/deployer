@@ -9,3 +9,4 @@ apidocs.openapi.json
 nohup.out
 *.log
 *.bak
+*.pem
