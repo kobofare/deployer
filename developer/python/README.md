@@ -120,9 +120,10 @@ deactivate
 
 ## 设置 pip 国内加速
 ```bash
+# 设置国内加速
 pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 
-升级 pip 本身
+# 升级 pip 本身
 python -m pip install --upgrade pip -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 ```
