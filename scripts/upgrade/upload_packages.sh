@@ -23,8 +23,8 @@ script_dir=$(cd "$(dirname "$0")" || exit 1; pwd)
 config_file="${script_dir}/modules.conf"
 env_file="${script_dir}/.env"
 package_root="/opt/package"
-base_url="${WEBDAV_BASE_URL:-https://webdav.yeying.pub}"
-prefix="${WEBDAV_PREFIX:-}"
+base_url="https://webdav.yeying.pub"
+prefix=""
 
 log() {
     echo -e "$*" | tee -a "$LOGFILE"
@@ -40,6 +40,9 @@ if [[ -f "$env_file" ]]; then
     source "$env_file"
     set +a
 fi
+
+base_url="${WEBDAV_BASE_URL:-$base_url}"
+prefix="${WEBDAV_PREFIX:-$prefix}"
 
 auth_args=()
 if [[ -n "${WEBDAV_TOKEN:-}" ]]; then
