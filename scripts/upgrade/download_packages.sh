@@ -106,7 +106,7 @@ list_remote_files() {
             ;;
     esac
 
-    printf '%s' "$body" | python3 - <<'PY'
+    printf '%s' "$body" | python3 -c '
 import sys
 import os
 import urllib.parse
@@ -120,25 +120,49 @@ try:
 except Exception:
     sys.exit(0)
 
+seen = set()
+def emit(name):
+    if not name or name in seen:
+        return
+    seen.add(name)
+    print(name)
+
 for elem in root.iter():
-    if not elem.tag.endswith('href'):
+    if elem.text is None:
         continue
-    if not elem.text:
+    text = elem.text.strip()
+    if not text:
         continue
-    path = urllib.parse.unquote(elem.text)
-    name = os.path.basename(path.rstrip('/'))
-    if name:
-        print(name)
-PY
+    if elem.tag.endswith("displayname"):
+        emit(text)
+        continue
+    if elem.tag.endswith("href"):
+        parsed = urllib.parse.urlparse(text)
+        path = parsed.path if parsed.scheme else text
+        path = urllib.parse.unquote(path)
+        name = os.path.basename(path.rstrip("/"))
+        emit(name)
+'
 }
 
 index=1
 log "\nstep $index -- begin download packages [$(date)]"
 
 mapfile -t all_remote_files < <(list_remote_files)
+log "remote files count: ${#all_remote_files[@]}"
+if [[ ${#all_remote_files[@]} -gt 0 ]]; then
+    printf '%s\n' "${all_remote_files[@]}" | tee -a "$LOGFILE" >/dev/null
+fi
 
 for module_name in "${modules[@]}"; do
     index=$((index+1))
+    module_name="${module_name//$'\r'/}"
+    module_name="${module_name#"${module_name%%[![:space:]]*}"}"
+    module_name="${module_name%"${module_name##*[![:space:]]}"}"
+    if [[ -z "$module_name" ]]; then
+        log "\nstep $index -- skip empty module name"
+        continue
+    fi
     log "\nstep $index -- handle module [${module_name}]"
 
     matches=()
