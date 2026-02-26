@@ -14,6 +14,18 @@
 
 ---
 
+## 准备工作
+
+### 清理使用`apt` 安装的node
+
+```bash
+apt remove --purge nodejs npm -y
+apt autoremove -y
+apt autoclean
+
+rm -rf ~/.npm ~/.node-gyp
+```
+
 ## 安装 nvm
 
 ### 官方脚本安装
