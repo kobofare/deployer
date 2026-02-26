@@ -16,7 +16,7 @@
 
 ## 准备工作
 
-### 清理使用`apt` 安装的node
+### 清理使用 `apt` 安装的node
 
 ```bash
 apt remove --purge nodejs npm -y
@@ -26,19 +26,20 @@ apt autoclean
 rm -rf ~/.npm ~/.node-gyp
 ```
 
+### 设置 `git` 代理
+
+先安装代理客户端，以socks5为例，本地放开1080端口，然后执行如下命令：
+
+```bash
+git config --global http.proxy socks5h://127.0.0.1:1080 && git config --global https.proxy socks5h://127.0.0.1:1080
+```
+
 ## 安装 nvm
 
-### 官方脚本安装
-
-如果是国内机器安装，在`/etc/hosts`添加一行`199.232.68.133  raw.githubusercontent.com`
+### 执行安装脚本
 
 ```bash
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-```
-# 或者
-
-```bash
-wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+./install.sh
 ```
 
 ### 加载终端配置
