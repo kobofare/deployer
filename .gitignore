@@ -4,6 +4,8 @@ output/
 .DS_Store
 openapitools.json
 script/typescript/apidocs.openapi.json
+scripts/upgrade/modules.conf
+scripts/upgrade/.env
 *.tar.gz
 apidocs.openapi.json
 nohup.out
