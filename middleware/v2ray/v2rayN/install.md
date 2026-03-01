@@ -1,27 +1,41 @@
-[下载](https://github.com/2dust/v2rayN/releases) 解压即可直接打开
+# v2rayN 安装与基础配置
 
-<img width="401" height="194" alt="image" src="https://github.com/user-attachments/assets/1ac3c4b3-7e51-4072-b58f-b6579d9a53d0" />
+## 1. 客户端安装
 
+- 下载地址：<https://github.com/2dust/v2rayN/releases>
+- 下载后解压即可运行，无需安装。
 
-配置项 → 添加[VMess]
+## 2. 添加节点（示例字段）
 
-  - 备注：随便写，比如 VPS-51.75
-  - 地址：51.75.133.235
-  - 端口：9876
-  - 用户ID（UUID）：1a738b8a-8...bf3-a4c67096f767
-  - AlterId：0
-  - 加密：aes-128-gcm
-  - 传输协议：tcp
-  - TLS：none/关闭
-  - 其余（伪装/Host/Path/SNI）：留空
+在 v2rayN 中添加 VMess（或你实际使用的协议）时，按提供商信息填写：
 
-  保存后：
+- 备注：自定义
+- 地址（Server）：`<server_host>`
+- 端口（Port）：`<server_port>`
+- 用户ID（UUID）：`<uuid>`
+- AlterId：`0`（按服务端要求）
+- 加密：按服务端要求
+- 传输协议：按服务端要求
+- TLS：按服务端要求
 
-  - 列表里右键节点 → 设为活动服务器
-  - 打开系统代理：托盘或底部“系统代理”选 自动配置系统代理（这样浏览器/命令行就走代理）。 (v2rayn.men (https://
-    v2rayn.men/tutorial))
-  - 点闪电测速或直接打开 GitHub 验证。
+> 注意：不要把真实节点地址、UUID、密钥提交到仓库。
 
-打开下方的 Tun 开关
+## 3. 启用代理能力
 
-<img width="1185" height="804" alt="image" src="https://github.com/user-attachments/assets/c78a3002-1c7c-417e-ab8d-781f298d57e5" />
+- 设为活动服务器
+- 打开「自动配置系统代理」
+- 打开「TUN 模式」
+
+## 4. 验证
+
+```powershell
+# Windows 验证出口
+curl.exe -x socks5h://127.0.0.1:10808 https://api.ipify.org
+```
+
+## 5. 下一步
+
+继续阅读：
+- `portproxy.md`（WSL 代理桥接）
+- `wsl-network.md`（WSL DNS 与代理）
+- `openclaw-integration.md`（OpenClaw 联调）
