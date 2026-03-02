@@ -23,3 +23,8 @@ git config --global user.name "你的GitHub用户名"
 git config --global user.email "你的GitHub邮箱"
 ```
 
+## Git中文显示
+使用`git status` 能够正确显示中文，而不是显示转义的乱码
+```bash
+git config core.quotepath false
+```
