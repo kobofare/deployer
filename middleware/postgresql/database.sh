@@ -52,16 +52,59 @@ require_docker_compose() {
   fi
 }
 
+read_env_var() {
+  local key="$1"
+  local value=""
+
+  value="$(
+    awk -v k="${key}" '
+      /^[[:space:]]*#/ { next }
+      /^[[:space:]]*$/ { next }
+      {
+        line = $0
+        split(line, parts, "=")
+        raw_key = parts[1]
+        sub(/^[[:space:]]*export[[:space:]]+/, "", raw_key)
+        gsub(/^[[:space:]]+|[[:space:]]+$/, "", raw_key)
+        if (raw_key == k) {
+          sub(/^[^=]*=/, "", line)
+          val = line
+        }
+      }
+      END {
+        if (val == "") exit 1
+        print val
+      }
+    ' "${ENV_FILE}"
+  )" || return 1
+
+  value="$(printf '%s' "${value}" | sed -e 's/\r$//' -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+
+  if [ "${#value}" -ge 2 ]; then
+    if [ "${value:0:1}" = "\"" ] && [ "${value: -1}" = "\"" ]; then
+      value="${value:1:${#value}-2}"
+    elif [ "${value:0:1}" = "'" ] && [ "${value: -1}" = "'" ]; then
+      value="${value:1:${#value}-2}"
+    fi
+  fi
+
+  printf '%s\n' "${value}"
+}
+
 load_env() {
   if [ ! -f "${ENV_FILE}" ]; then
     error ".env not found: ${ENV_FILE}. Run './database.sh generate-env' first."
     exit 1
   fi
 
-  set -a
-  # shellcheck disable=SC1090
-  source "${ENV_FILE}"
-  set +a
+  if ! POSTGRES_USER="$(read_env_var "POSTGRES_USER")"; then
+    error "POSTGRES_USER is required in .env"
+    exit 1
+  fi
+  if ! POSTGRES_PASSWORD="$(read_env_var "POSTGRES_PASSWORD")"; then
+    error "POSTGRES_PASSWORD is required in .env"
+    exit 1
+  fi
 
   : "${POSTGRES_USER:?POSTGRES_USER is required in .env}"
   : "${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required in .env}"
