@@ -51,6 +51,11 @@ if [[ -z "$current_version" || -z "$target_version" ]]; then
     exit 1
 fi
 
+if [[ "$current_version" == "$target_version" ]]; then
+    log "current_version equals target_version (${current_version}), skip warehouse upgrade."
+    exit 0
+fi
+
 current_dir=$(resolve_version_dir "$current_version") || {
     log "ERROR! current version directory is missing: /opt/deploy/warehouse-v${current_version}-****"
     exit 1
