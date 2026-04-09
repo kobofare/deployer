@@ -298,6 +298,51 @@ select_latest_named_item() {
     [[ -n "$SELECTED_NAME" ]]
 }
 
+select_latest_by_fixed_short_commit() {
+    local module_name=$1
+    shift
+    local candidates=("$@")
+    local item name stem rest version commit
+    local max_key="" max_name="" max_version="" max_commit="" max_stem=""
+    local version_key=""
+
+    for item in "${candidates[@]}"; do
+        name=$(basename "$item")
+        stem=${name%.tar.gz}
+
+        if [[ "$stem" != "${module_name}-v"* ]]; then
+            continue
+        fi
+
+        rest=${stem#"${module_name}-v"}
+        commit=${rest##*-}
+        version=${rest%-*}
+
+        # Parse from right side with fixed short commit length (7).
+        if [[ "${#commit}" -ne 7 || ! "$commit" =~ ^[0-9A-Za-z]{7}$ ]]; then
+            continue
+        fi
+        if [[ "$version" == "$rest" || ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            continue
+        fi
+
+        version_key=$(version_key_from_version "$version") || continue
+        if [[ -z "$max_name" || "$version_key" > "$max_key" || ( "$version_key" == "$max_key" && "$stem" > "$max_stem" ) ]]; then
+            max_key="$version_key"
+            max_name="$name"
+            max_version="$version"
+            max_commit="$commit"
+            max_stem="$stem"
+        fi
+    done
+
+    SELECTED_NAME="$max_name"
+    SELECTED_VERSION="$max_version"
+    SELECTED_COMMIT="$max_commit"
+    SELECTED_VERSION_KEY="$max_key"
+    [[ -n "$SELECTED_NAME" ]]
+}
+
 archive_top_dir() {
     python3 - "$1" <<'PY'
 import sys
